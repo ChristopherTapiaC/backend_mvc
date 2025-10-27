@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+{% block title %}{% if form.instance.pk %}Editar producto{% else %}Crear producto{% endif %}{% endblock %}
+{% block content %}
+  <h2 class="text-2xl font-semibold mb-2">
+    {% if form.instance.pk %}Editar producto{% else %}Crear producto{% endif %}
+  </h2>
+  <div class="bg-white shadow-md rounded-xl p-8 max-w-lg mx-auto border border-slate-200">
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="flex justify-end gap-3">
+        <a href="{% url 'product_list' %}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</a>
+        <button class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Guardar</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

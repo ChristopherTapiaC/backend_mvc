@@ -1,0 +1,33 @@
+{% extends "catalog/base.html" %}
+{% block title %}Nueva venta{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-2">Nueva venta</h2>
+<p class="text-slate-500 mb-6">Selecciona el cliente para iniciar la venta.</p>
+
+<div class="bg-white shadow-md rounded-xl p-8 max-w-lg mx-auto border border-slate-200">
+  <form method="post" class="space-y-5">
+  {% csrf_token %}
+
+  <div>
+    <label for="client_id" class="block text-sm font-medium text-slate-600 mb-1">Cliente</label>
+    <select id="client_id" name="client_id"
+            class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-800 shadow-sm
+                   focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <option value="">Selecciona un cliente…</option>
+      {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <a href="{% url 'sale_list' %}" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700">
+      Cancelar
+    </a>
+    <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium">
+      Continuar
+    </button>
+  </div>
+</form>
+</div>
+{% endblock %}

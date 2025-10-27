@@ -1,0 +1,45 @@
+{% extends 'catalog/base.html' %}
+{% block title %}
+  Ventas
+{% endblock %}
+{% block content %}
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold">Ventas</h2>
+      <p class="text-slate-500">Listado de ventas</p>
+    </div>
+    <a href="{% url 'sale_start' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium">+ Nueva venta</a>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow-md rounded-xl border border-slate-200">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50 text-slate-600 text-sm">
+        <tr>
+          <th class="text-left px-6 py-3 font-semibold">#</th>
+          <th class="text-left px-6 py-3 font-semibold">Cliente</th>
+          <th class="text-left px-6 py-3 font-semibold">Fecha</th>
+          <th class="text-left px-6 py-3 font-semibold">Total</th>
+          <th class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for s in sales %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-3">{{ s.id }}</td>
+            <td class="px-6 py-3">{{ s.client.name }}</td>
+            <td class="px-6 py-3">{{ s.created_at|date:'d/m/Y H:i' }}</td>
+            <td class="px-6 py-3">$ {{ s.total }}</td>
+            <td class="px-6 py-3 text-right">
+              <a class="text-indigo-600 hover:underline mr-3" href="{% url 'sale_edit' s.id %}">Editar</a>
+              <a class="text-rose-600 hover:underline" href="{% url 'sale_delete' s.id %}">Eliminar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="px-6 py-6 text-slate-500" colspan="5">Sin ventas</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

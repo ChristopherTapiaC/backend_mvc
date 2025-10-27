@@ -1,0 +1,85 @@
+{% extends "catalog/base.html" %}
+{% block title %}Carrito de venta{% endblock %}
+{% block content %}
+
+<h2 class="text-2xl font-semibold mb-2">Carrito de venta</h2>
+<p class="text-slate-500 mb-6">Cliente: <span class="font-semibold">{{ client.name }}</span></p>
+
+<!-- Form agregar ítem -->
+<div class="bg-white shadow-md rounded-xl p-6 border border-slate-200 mb-6">
+  <form method="post" class="grid md:grid-cols-3 gap-4 items-end">
+    {% csrf_token %}
+    <div>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Producto</label>
+      {{ add_form.product }}
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Cantidad</label>
+      {{ add_form.quantity }}
+    </div>
+    <div class="flex md:justify-end">
+      <button class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium w-full md:w-auto">
+        Agregar ítem
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Lista de ítems -->
+<div class="overflow-x-auto bg-white shadow-md rounded-xl border border-slate-200">
+  <table class="min-w-full divide-y divide-slate-200">
+    <thead class="bg-slate-50 text-slate-600 text-sm">
+      <tr>
+        <th class="text-left px-6 py-3 font-semibold">Producto</th>
+        <th class="text-left px-6 py-3 font-semibold">Cantidad</th>
+        <th class="text-left px-6 py-3 font-semibold">Precio</th>
+        <th class="text-left px-6 py-3 font-semibold">Subtotal</th>
+        <th class="px-6 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for it in items %}
+      <tr class="hover:bg-slate-50">
+        <td class="px-6 py-3">{{ it.name }}</td>
+        <td class="px-6 py-3">{{ it.quantity }}</td>
+        <td class="px-6 py-3">$ {{ it.price|floatformat:2 }}</td>
+        <td class="px-6 py-3">$ {{ it.subtotal|floatformat:2 }}</td>
+        <td class="px-6 py-3 text-right">
+          <form method="post" action="{% url 'sale_item_remove' it.index %}">
+            {% csrf_token %}
+            <button class="text-rose-600 hover:underline">Quitar</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td class="px-6 py-6 text-slate-500" colspan="5">Sin ítems</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Total y acciones -->
+<div class="mt-8 flex justify-between items-center">
+  <p class="text-lg">
+    Total: <span class="font-semibold">$ {{ total|floatformat:0 }}</span>
+  </p>
+
+  <div class="flex gap-3">
+    <!-- Botón cancelar -->
+    <a href="{% url 'sale_cancel' %}" 
+       class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-5 py-2 rounded-lg shadow transition">
+       Cancelar venta
+    </a>
+
+    <!-- Botón confirmar -->
+    <form action="{% url 'sale_confirm' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" 
+              class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-2 rounded-lg shadow transition">
+        Confirmar venta
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

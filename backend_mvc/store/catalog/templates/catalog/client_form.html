@@ -1,0 +1,28 @@
+{% extends 'catalog/base.html' %}
+{% block title %}{{ form.instance.pk|yesno:"Editar cliente,Crear cliente" }}{% endblock %}
+{% block content %}
+  <h2 class="text-2xl font-semibold mb-2">{{ form.instance.pk|yesno:"Editar cliente,Crear cliente" }}</h2>
+  <p class="text-slate-500 mb-6">Completa los datos del cliente.</p>
+
+  <div class="bg-white shadow-md rounded-xl p-8 max-w-lg mx-auto border border-slate-200">
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Nombre</label>
+        {{ form.name }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+        {{ form.email }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Teléfono</label>
+        {{ form.phone }}
+      </div>
+      <div class="flex justify-end gap-3">
+        <a href="{% url 'client_list' %}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</a>
+        <button class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Guardar</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "catalog/base.html" %}
+{% block title %}Home - Informes{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-2">Informes</h2>
+<p class="text-slate-500 mb-6">Resumen de ventas.</p>
+
+<!-- KPIs -->
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Monto total vendido</p>
+    <p class="mt-1 text-2xl font-semibold">$ {{ kpi_total_monto|floatformat:0 }}</p>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Ítems vendidos</p>
+    <p class="mt-1 text-2xl font-semibold">{{ kpi_items_vendidos }}</p>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Clientes con compras</p>
+    <p class="mt-1 text-2xl font-semibold">{{ kpi_clientes_activos }}</p>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Ventas / Productos</p>
+    <p class="mt-1 text-2xl font-semibold">
+      {{ kpi_ventas }} <span class="text-slate-400 text-lg">/</span> {{ kpi_productos }}
+    </p>
+  </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-8">
+  <!-- Productos -->
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-md min-w-0 overflow-hidden">
+    <h3 class="text-lg font-semibold mb-3">Productos más vendidos</h3>
+    <div class="relative h-56">
+      <canvas id="chartProductos" class="block w-full h-full"></canvas>
+    </div>
+  </div>
+
+  <!-- Clientes -->
+  <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-md min-w-0 overflow-hidden">
+    <h3 class="text-lg font-semibold mb-3">Clientes con más ventas</h3>
+    <div class="relative h-56">
+      <canvas id="chartClientes" class="block w-full h-full"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // 1) Traer datos desde Django
+  const productos = JSON.parse('{{ productos_json|escapejs }}');
+  const clientes  = JSON.parse('{{ clientes_json|escapejs }}');
+
+  // 2) Opciones base (responsivo sin desbordar)
+  const baseOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  };
+
+  // 3) Crear gráficos (solo si existe el canvas)
+  const prodCanvas = document.getElementById('chartProductos');
+  if (prodCanvas) {
+    new Chart(prodCanvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: productos.map(p => p["product__name"]),
+        datasets: [{ label: 'Cantidad', data: productos.map(p => Number(p["total_vendido"] || 0)) }]
+      },
+      options: baseOpts
+    });
+  }
+
+  const cliCanvas = document.getElementById('chartClientes');
+  if (cliCanvas) {
+    new Chart(cliCanvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: clientes.map(c => c["client__name"]),
+        datasets: [{ label: 'Ítems', data: clientes.map(c => Number(c["total_items"] || 0)) }]
+      },
+      options: baseOpts
+    });
+  }
+</script>
+
+
+{% endblock %}

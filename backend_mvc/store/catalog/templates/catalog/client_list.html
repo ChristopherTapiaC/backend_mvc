@@ -1,0 +1,43 @@
+{% extends 'catalog/base.html' %}
+{% block title %}
+  Clientes
+{% endblock %}
+{% block content %}
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold">Clientes</h2>
+      <p class="text-slate-500">Gestión de clientes</p>
+    </div>
+    <a href="{% url 'client_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium">+ Nuevo</a>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow-md rounded-xl border border-slate-200">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50 text-slate-600 text-sm">
+        <tr>
+          <th class="text-left px-6 py-3 font-semibold">Nombre</th>
+          <th class="text-left px-6 py-3 font-semibold">Email</th>
+          <th class="text-left px-6 py-3 font-semibold">Teléfono</th>
+          <th class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for c in clients %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-3">{{ c.name }}</td>
+            <td class="px-6 py-3">{{ c.email }}</td>
+            <td class="px-6 py-3">{{ c.phone }}</td>
+            <td class="px-6 py-3 text-right">
+              <a class="text-indigo-600 hover:underline mr-3" href="{% url 'client_edit' c.id %}">Editar</a>
+              <a class="text-rose-600 hover:underline" href="{% url 'client_delete' c.id %}">Eliminar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="px-6 py-6 text-slate-500" colspan="4">Sin clientes</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

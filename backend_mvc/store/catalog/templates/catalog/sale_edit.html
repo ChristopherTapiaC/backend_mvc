@@ -1,0 +1,77 @@
+{% extends "catalog/base.html" %}
+{% block title %}Editar venta #{{ sale.id }}{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-2">Editar venta #{{ sale.id }}</h2>
+<p class="text-slate-500 mb-6">
+  Cliente: <span class="font-semibold">{{ sale.client.name }}</span> ·
+  Fecha: {{ sale.created_at|date:"d/m/Y H:i" }}
+</p>
+
+<!-- Agregar nuevo ítem a la venta -->
+<div class="bg-white shadow-md rounded-xl p-6 border border-slate-200 mb-6">
+  <form method="post" class="grid md:grid-cols-3 gap-4 items-end">
+    {% csrf_token %}
+    <div>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Producto</label>
+      {{ add_form.product }}
+      {% if add_form.product.errors %}
+        <p class="text-rose-600 text-sm mt-1">{{ add_form.product.errors.0 }}</p>
+      {% endif %}
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Cantidad</label>
+      {{ add_form.quantity }}
+      {% if add_form.quantity.errors %}
+        <p class="text-rose-600 text-sm mt-1">{{ add_form.quantity.errors.0 }}</p>
+      {% endif %}
+    </div>
+    <div class="flex md:justify-end">
+      <button class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium w-full md:w-auto">
+        Agregar ítem
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Detalles actuales -->
+<div class="overflow-x-auto">
+  <table class="min-w-[720px] w-full table-fixed border border-slate-200 rounded-xl">
+    <thead class="bg-slate-50 text-slate-600 text-sm">
+      <tr>
+        <th class="w-[45%] text-left px-6 py-3 font-semibold">Producto</th>
+        <th class="w-[15%] text-left px-6 py-3 font-semibold">Cantidad</th>
+        <th class="w-[20%] text-left px-6 py-3 font-semibold">Precio</th>
+        <th class="w-[20%] text-left px-6 py-3 font-semibold">Subtotal</th>
+        <th class="w-[10%] px-6 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 text-sm">
+      {% for d in details %}
+      <tr class="hover:bg-slate-50">
+        <td class="px-6 py-3 whitespace-nowrap">{{ d.product.name }}</td>
+        <td class="px-6 py-3 whitespace-nowrap">{{ d.quantity }}</td>
+        <td class="px-6 py-3 whitespace-nowrap">$ {{ d.product.price|floatformat:0 }}</td>
+        <td class="px-6 py-3 whitespace-nowrap">$ {{ d.line_total|floatformat:0 }}</td>
+        <td class="px-6 py-3 text-right whitespace-nowrap">
+          <form method="post" action="{% url 'sale_detail_delete' sale.id d.id %}">
+            {% csrf_token %}
+            <button class="text-rose-600 hover:underline">Quitar</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="px-6 py-6 text-slate-500">Sin ítems</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Total y acciones -->
+<div class="mt-8 flex justify-between items-center">
+  <p class="text-lg">Total: <span class="font-semibold">$ {{ total|floatformat:0 }}</span></p>
+  <div class="flex gap-3">
+    <a href="{% url 'sale_list' %}" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700">Volver</a>
+  </div>
+</div>
+{% endblock %}

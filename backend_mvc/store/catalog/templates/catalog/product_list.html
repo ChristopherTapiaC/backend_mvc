@@ -1,0 +1,46 @@
+{% extends 'catalog/base.html' %}
+{% block title %}
+  Productos - Tienda MVC
+{% endblock %}
+{% block content %}
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold">Productos</h2>
+    <a href="{% url 'product_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium">+ Nuevo producto</a>
+  </div>
+
+  {% if products %}
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto sm:overflow-x-visible">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50 text-slate-600 text-sm">
+          <tr>
+            <th class="w-[45%] text-left px-6 py-3 font-semibold">Nombre</th>
+            <th class="w-[20%] text-left px-6 py-3 font-semibold">Precio</th>
+            <th class="w-[25%] text-left px-6 py-3 font-semibold">Creado</th>
+            <th class="w-[10%] px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-sm">
+          {% for product in products %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-3 whitespace-nowrap">{{ product.name }}</td>
+            <td class="px-6 py-3 whitespace-nowrap">${{ product.price }}</td>
+            <td class="px-6 py-3 whitespace-nowrap">{{ product.create_in|date:"d/m/Y H:i" }}</td>
+            <td class="px-6 py-3 text-right whitespace-nowrap">
+              <a class="text-indigo-600 hover:underline mr-3" href="{% url 'product_edit' product.id %}">Editar</a>
+              <a class="text-rose-600 hover:underline" href="{% url 'product_delete' product.id %}">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  {% else %}
+    <div class="flex flex-col items-center justify-center py-16 bg-white border border-dashed border-slate-300 rounded-xl shadow-inner text-center">
+      <div class="text-5xl mb-3">🛒</div>
+      <p class="text-lg font-medium mb-2">No hay productos aún</p>
+      <p class="text-slate-500 mb-4">Crea el primero para comenzar tu catálogo.</p>
+      <a href="{% url 'product_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl">Crear producto</a>
+    </div>
+  {% endif %}
+{% endblock %}
