@@ -79,7 +79,7 @@ PY
 
 ### 4️⃣ Iniciar servidor
 ```bash
-python manage.py runserver
+py manage.py runserver
 ```
 - App: http://127.0.0.1:8000/
 - Admin: http://127.0.0.1:8000/admin/

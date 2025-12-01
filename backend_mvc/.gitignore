@@ -1,0 +1,55 @@
+# === Entorno virtual ===
+.venv/
+venv/
+env/
+
+# === Base de datos SQLite ===
+db.sqlite3
+*.sqlite3
+
+# === Archivos de Django ===
+__pycache__/
+*/__pycache__/
+*.py[cod]
+
+# Archivos de migraciones compilados
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# No ignorar las migraciones reales (solo los archivos compilados)
+!*/migrations/*.py
+
+# === Archivos estáticos generados ===
+staticfiles/
+static/
+
+# === Archivos de logs ===
+*.log
+
+# === Archivos temporales ===
+*.pot
+*.mo
+
+# === VSCode ===
+.vscode/
+
+# === Sistema operativo ===
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# === Python ===
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+.eggs/
+dist/
+build/

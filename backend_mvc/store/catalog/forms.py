@@ -1,5 +1,7 @@
 from django import forms
 from .models import Product, Client
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 BASE_INPUT = (
     "block w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 "
@@ -17,7 +19,7 @@ class ProductForm(forms.ModelForm):
                 'class': BASE_INPUT, 'placeholder': 'Ej: Teclado mecánico RGB', 'autocomplete': 'off'
             }),
             'price': forms.NumberInput(attrs={
-                'class': BASE_INPUT, 'step': '0.01', 'inputmode': 'decimal', 'placeholder': '19990.00'
+                'class': BASE_INPUT, 'step': '0.01', 'inputmode': 'decimal', 'placeholder': '$19.990'
             }),
         }
     def clean_price(self):
@@ -47,3 +49,33 @@ class AddItemForm(forms.Form):
         min_value=1, initial=1,
         widget=forms.NumberInput(attrs={'class': BASE_INPUT, 'min': '1', 'step': '1', 'inputmode': 'numeric', 'placeholder': '1'})
     )
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "email")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        input_classes = (
+            "w-full border border-slate-300 rounded-lg px-3 py-2 "
+            "focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        )
+
+        self.fields["username"].widget.attrs.update({
+            "class": input_classes,
+            "placeholder": "Ej: chris061",
+        })
+        self.fields["email"].widget.attrs.update({
+            "class": input_classes,
+            "placeholder": "tu@email.com",
+        })
+        self.fields["password1"].widget.attrs.update({
+            "class": input_classes,
+        })
+        self.fields["password2"].widget.attrs.update({
+            "class": input_classes,
+        })

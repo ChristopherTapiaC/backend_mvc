@@ -29,4 +29,5 @@ urlpatterns = [
     # Edición de ventas ya confirmadas
     path('sales/<int:sale_id>/edit/', views.sale_edit, name='sale_edit'),
     path('sales/<int:sale_id>/detail/<int:detail_id>/delete/', views.sale_detail_delete, name='sale_detail_delete'),
+
 ]

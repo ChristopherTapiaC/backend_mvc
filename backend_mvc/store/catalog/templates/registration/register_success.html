@@ -1,0 +1,21 @@
+{% extends "catalog/base.html" %}
+{% block title %}Registro completado{% endblock %}
+
+{% block content %}
+<div class="fixed inset-0 bg-slate-900/40 flex items-center justify-center">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md text-center">
+    <h2 class="text-2xl font-semibold mb-3">¡Registro exitoso!</h2>
+    <p class="text-slate-600 mb-6">
+      Tu usuario se creó correctamente. Ahora puedes iniciar sesión.
+    </p>
+
+    <a href="{% url 'login' %}"
+       class="inline-flex items-center justify-center px-6 py-2.5
+              rounded-xl bg-indigo-600 text-white font-medium
+              hover:bg-indigo-700 focus:outline-none focus:ring-2
+              focus:ring-indigo-500 focus:ring-offset-2">
+      Continuar
+    </a>
+  </div>
+</div>
+{% endblock %}
