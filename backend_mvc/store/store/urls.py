@@ -18,6 +18,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.urls import path, include
 from catalog import views as catalog_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,15 @@ urlpatterns = [
     path('accounts/register/', catalog_views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+
+    # JWT
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Swagger / OpenAPI
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+    # API app routes
+    path('api/', include('catalog.api_urls')),    
 ]
